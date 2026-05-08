@@ -200,3 +200,40 @@ body::before {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Blog article: main column + sticky research sidebar */
+.blog-section-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 36px);
+  align-items: start;
+}
+
+@media (min-width: 960px) {
+  .blog-section-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 300px);
+  }
+}
+
+.blog-collapsible-panel summary {
+  list-style: none;
+}
+
+.blog-collapsible-panel summary::-webkit-details-marker {
+  display: none;
+}
+
+.blog-collapsible-panel[open] summary {
+  border-bottom: 2px solid #0A0A0A;
+  margin-bottom: 12px;
+}
+
+.blog-collapsible-panel {
+  border: 2px solid #0A0A0A;
+  background-color: rgba(255, 255, 255, 0.45);
+  margin-top: 12px;
+}
+
+.blog-controls-panel.blog-collapsible-panel {
+  background-color: rgba(255, 229, 0, 0.15);
+}

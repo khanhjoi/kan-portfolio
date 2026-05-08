@@ -9,8 +9,8 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "YOUR NAME — Frontend Developer",
-  description: "Portfolio of a frontend developer",
+  title: "Khanh Nguyen (Kan) — Software Developer",
+  description: "Portfolio of a software developer",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

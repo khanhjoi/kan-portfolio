@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 
-const links = ["About", "Projects", "Skills", "Contact"];
+const links = ["About", "Portfolio", "Projects", "Skills", "Blog", "Contact"];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);

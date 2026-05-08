@@ -38,7 +38,7 @@ export default function Contact() {
         {/* Label */}
         <div className="reveal" style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "24px" }}>
           <span style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.3em", color: "#FF2800", fontWeight: "bold", fontFamily: "'Space Mono', monospace" }}>
-            004 — Connect
+            006 — Connect
           </span>
           <div style={{ height: "2px", width: "48px", backgroundColor: "#0A0A0A" }} />
         </div>

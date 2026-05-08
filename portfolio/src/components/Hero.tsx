@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-const roles = ["Frontend Developer", "UI Craftsman", "React Engineer", "Web Builder"];
+const roles = ["Software Developer", "UI Craftsman", "Web Developer", "Data Engineer"];
 
 const marqueeItems = [
   "NEXT.JS","★","REACT","★","TAILWIND","★","TYPESCRIPT","★",
@@ -97,7 +97,7 @@ export default function Hero() {
           color: "#0A0A0A",
           letterSpacing: "-0.01em",
         }}>
-          Your
+          Khanh
         </h1>
         <h1 className="anim-slide-left delay-300" style={{
           fontFamily: "'Bebas Neue', 'Arial Black', sans-serif",
@@ -109,7 +109,7 @@ export default function Hero() {
           marginBottom: "40px",
           letterSpacing: "-0.01em",
         }}>
-          Name
+          Nguyen
         </h1>
 
         {/* Role typewriter */}
