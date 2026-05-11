@@ -50,14 +50,16 @@ export const HEAP_ACTION_META: Record<HeapPageAction, HeapActionMeta> = {
     label: "Read",
     accent: "#7DD3FC",
     summary:
-      "The buffer manager checks memory first. On a miss the page is pulled from disk into a buffer slot, then the executor follows the ItemId pointer to the tuple bytes.",
+      "The buffer manager checks memory first. Cache hit means the page is already in the buffer and just gets pinned; cache miss means PostgreSQL pulls it from disk into a buffer slot before following the ItemId pointer to the tuple bytes.",
     steps: [
       "Locate the block and item offset for the target row.",
-      "Check the buffer hash table first; this loop alternates hit and miss behavior.",
-      "Use the ItemId array to jump to the tuple start and length inside the page.",
+      "Cache hit: the page is already in shared buffers, so PostgreSQL pins it and reads immediately.",
+      "Cache miss: the page is fetched from disk into a buffer slot, then the executor follows the ItemId pointer to the tuple.",
     ],
     readout: [
-      { label: "Flow", value: "buffer hit or disk -> buffer -> tuple" },
+      { label: "Cache hit", value: "page already in buffer pool; pin and read" },
+      { label: "Cache miss", value: "disk page copied into a buffer slot first" },
+      { label: "Flow", value: "buffer check -> ItemId -> tuple bytes" },
       { label: "Inside page", value: "ItemId tells executor where bytes live" },
       { label: "Result", value: "page is pinned while in use" },
     ],
@@ -215,6 +217,8 @@ export default function HeapPageScene({ actionMode = "insert" }: HeapPageScenePr
 
   const [tooltip, setTooltip] = useState<{ title: string; body: string } | null>(null);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
+  const [readState, setReadState] = useState<"Cache hit" | "Cache miss">("Cache miss");
+  const readStateRef = useRef<"Cache hit" | "Cache miss">("Cache miss");
 
   useEffect(() => {
     const container = containerRef.current;
@@ -581,6 +585,11 @@ export default function HeapPageScene({ actionMode = "insert" }: HeapPageScenePr
         const cycleLength = 7;
         const phase = (elapsed % cycleLength) / cycleLength;
         const missCycle = Math.floor(elapsed / cycleLength) % 2 === 0;
+        const nextReadState = missCycle ? "Cache miss" : "Cache hit";
+        if (nextReadState !== readStateRef.current) {
+          readStateRef.current = nextReadState;
+          setReadState(nextReadState);
+        }
         const route = routePoint(missCycle ? readMissRoute : readHitRoute, clamp01((phase - 0.06) / 0.74));
         packet.visible = true;
         packet.position.copy(route);
@@ -726,6 +735,24 @@ export default function HeapPageScene({ actionMode = "insert" }: HeapPageScenePr
           Heap page flow - {meta.label}
         </div>
         <p style={{ margin: 0, fontSize: "11px", lineHeight: 1.55, opacity: 0.9 }}>{meta.summary}</p>
+        {actionMode === "read" ? (
+          <div
+            style={{
+              marginTop: "8px",
+              padding: "6px 8px",
+              border: `1px solid ${meta.accent}`,
+              backgroundColor: "rgba(125, 211, 252, 0.12)",
+              fontSize: "10px",
+              fontWeight: "bold",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              fontFamily: "'Space Mono', monospace",
+              color: meta.accent,
+            }}
+          >
+            Read phase: {readState}
+          </div>
+        ) : null}
         <div
           style={{
             marginTop: "8px",
