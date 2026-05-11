@@ -33,12 +33,12 @@ export const articleSections: ArticleSection[] = [
       `New ItemIds claim space from the top of the free corridor while fresh tuple payloads grow upward from the bottom; the gap in the middle is literally the page's breathing room. Index-only scans and HOT chains complicate the story, but the mental model is stable: header → directory → free space → tuples → optional special area.`,
     ],
     figureCaption:
-      "Figure A — exaggerated slab layout with colored ItemId slots mapping to tuple fragments; the dashed middle band shrinks as inserts consume free space.",
+      "Figure A - select insert, read, delete, or update to watch how the heap page cooperates with FSM, WAL, disk, and the buffer pool.",
     sidebar: {
       headline: "Research ↔ model",
       modelNotes: [
         "The cream slab is one 8 KiB-class heap page (conceptually). Dark strip ≈ PageHeaderData; colored cubes ≈ ItemId slots; lower boxes ≈ heap tuples.",
-        "Dragging “Insert pressure” pulls pd_lower and pd_upper toward each other in real life — here we compress the dashed free-space prism so you can see the squeeze.",
+        "The external modules show the wider flow around one page: FSM helps choose a target page, WAL records changes first, the buffer pool hosts the in-memory page, and disk supplies misses.",
       ],
       bullets: [
         "pd_lower / pd_upper bracket the free-space corridor between the ItemId directory and tuple storage.",

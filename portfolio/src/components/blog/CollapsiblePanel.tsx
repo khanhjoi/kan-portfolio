@@ -1,7 +1,7 @@
 "use client";
 
 import type { CSSProperties, ReactNode } from "react";
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 type CollapsiblePanelProps = {
   summary: ReactNode;
@@ -20,7 +20,12 @@ export default function CollapsiblePanel({
   style,
   className = "blog-collapsible-panel",
 }: CollapsiblePanelProps) {
-  const [open, setOpen] = useState(defaultOpen);
+  /** Start closed so SSR + first client paint match; sync `defaultOpen` before paint (avoids `<details open>` hydration bugs). */
+  const [open, setOpen] = useState(false);
+
+  useLayoutEffect(() => {
+    setOpen(defaultOpen);
+  }, [defaultOpen]);
 
   return (
     <details

@@ -168,10 +168,13 @@ export default function Contact() {
           display: "flex", justifyContent: "space-between", alignItems: "center",
           flexWrap: "wrap", gap: "16px",
         }}>
-          <span style={{
-            fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.2em",
-            color: "#8A8A8A", fontFamily: "'Space Mono', monospace",
-          }}>
+          <span
+            suppressHydrationWarning
+            style={{
+              fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.2em",
+              color: "#8A8A8A", fontFamily: "'Space Mono', monospace",
+            }}
+          >
             © {new Date().getFullYear()} Your Name — All rights reserved
           </span>
           <span style={{

@@ -6,7 +6,7 @@ import { useMemo, useRef, useState } from "react";
 import CollapsiblePanel from "@/components/blog/CollapsiblePanel";
 import SceneGate from "@/components/blog/SceneGate";
 import { useLazyMountScene } from "@/components/blog/useLazyMountScene";
-import HeapPageScene from "@/components/blog/scenes/HeapPageScene";
+import HeapPageScene, { HEAP_ACTION_META, type HeapPageAction } from "@/components/blog/scenes/HeapPageScene";
 import SharedBuffersScene from "@/components/blog/scenes/SharedBuffersScene";
 import type { BufferFlowMode } from "@/components/blog/scenes/SharedBuffersScene";
 import ToastScene from "@/components/blog/scenes/ToastScene";
@@ -192,6 +192,47 @@ function ControlSlider({
   );
 }
 
+function HeapActionToggle({
+  value,
+  onChange,
+}: {
+  value: HeapPageAction;
+  onChange: (value: HeapPageAction) => void;
+}) {
+  const actions: HeapPageAction[] = ["insert", "read", "delete", "update"];
+
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "8px", marginBottom: "10px" }}>
+      {actions.map((action) => {
+        const meta = HEAP_ACTION_META[action];
+        const active = value === action;
+        return (
+          <button
+            key={action}
+            type="button"
+            onClick={() => onChange(action)}
+            style={{
+              padding: "10px 12px",
+              fontSize: "10px",
+              fontWeight: "bold",
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              fontFamily: "'Space Mono', monospace",
+              border: `2px solid ${ink}`,
+              backgroundColor: active ? ink : "transparent",
+              color: active ? meta.accent : ink,
+              cursor: "pointer",
+              textAlign: "left",
+            }}
+          >
+            {meta.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 function ModeToggle({
   value,
   onChange,
@@ -230,7 +271,7 @@ function ModeToggle({
 }
 
 export default function HowDatabasesArticle() {
-  const [heapFill, setHeapFill] = useState(0.28);
+  const [heapAction, setHeapAction] = useState<HeapPageAction>("insert");
   const [toastChunks, setToastChunks] = useState(4);
   const [bufferMode, setBufferMode] = useState<BufferFlowMode>("auto");
 
@@ -241,17 +282,13 @@ export default function HowDatabasesArticle() {
   const toastMount = useLazyMountScene(toastSectionRef);
   const bufferMount = useLazyMountScene(bufferSectionRef);
 
-  const heapStats = useMemo(() => {
-    const pressure = Math.round(heapFill * 100);
-    const nominalFree = Math.max(0, Math.round((1 - heapFill) * 100));
-    return { pressure, nominalFree };
-  }, [heapFill]);
-
   const sectionsById = useMemo(() => {
     const m = new Map<string, ArticleSection>();
     articleSections.forEach((s) => m.set(s.id, s));
     return m;
   }, []);
+
+  const heapActionMeta = HEAP_ACTION_META[heapAction];
 
   return (
     <main style={{ backgroundColor: "#F2EDE4", color: ink, minHeight: "100vh", padding: "100px 24px 88px" }}>
@@ -330,7 +367,7 @@ export default function HowDatabasesArticle() {
                   onUnlock={heapMount.unlock}
                   label={sectionsById.get("heap-page")!.shortLabel}
                 >
-                  <HeapPageScene fillRatio={heapFill} />
+                  <HeapPageScene actionMode={heapAction} />
                 </SceneGate>
 
                 <CollapsiblePanel
@@ -339,15 +376,15 @@ export default function HowDatabasesArticle() {
                   style={{ marginTop: "14px", border: "2px solid #0A0A0A", backgroundColor: "rgba(255, 229, 0, 0.15)" }}
                   className="blog-collapsible-panel blog-controls-panel"
                 >
-                  <ControlSlider
-                    label="Insert pressure (consumes free corridor)"
-                    min={0}
-                    max={1}
-                    step={0.02}
-                    value={heapFill}
-                    onChange={setHeapFill}
-                    hint="Higher values squeeze the dashed middle band — analogous to pd_lower advancing toward pd_upper."
-                  />
+                  <HeapActionToggle value={heapAction} onChange={setHeapAction} />
+                  <p style={{ ...prose, fontSize: "13px", marginBottom: "10px", opacity: 0.86 }}>{heapActionMeta.summary}</p>
+                  <ul style={{ ...prose, fontSize: "12px", paddingLeft: "18px", marginBottom: 0 }}>
+                    {heapActionMeta.steps.map((step) => (
+                      <li key={step} style={{ marginBottom: "6px" }}>
+                        {step}
+                      </li>
+                    ))}
+                  </ul>
                 </CollapsiblePanel>
 
                 <p style={{ ...prose, fontSize: "13px", opacity: 0.72, marginTop: "14px" }}>
@@ -367,16 +404,18 @@ export default function HowDatabasesArticle() {
                       paddingLeft: "12px",
                     }}
                   >
-                    <div>
-                      <span style={{ opacity: 0.65 }}>Insert pressure target · </span>
-                      <strong>{heapStats.pressure}%</strong>
+                    <div style={{ marginBottom: "8px" }}>
+                      <span style={{ opacity: 0.65 }}>Selected flow · </span>
+                      <strong>{heapActionMeta.label}</strong>
                     </div>
-                    <div>
-                      <span style={{ opacity: 0.65 }}>Nominal free corridor · </span>
-                      <strong>{heapStats.nominalFree}%</strong>
-                    </div>
+                    {heapActionMeta.readout.map((row) => (
+                      <div key={row.label} style={{ marginBottom: "6px" }}>
+                        <span style={{ opacity: 0.65 }}>{row.label} · </span>
+                        <strong>{row.value}</strong>
+                      </div>
+                    ))}
                     <div style={{ marginTop: "8px", fontSize: "11px", opacity: 0.75 }}>
-                      Values are illustrative — they drive the 3D scale, not a live byte counter from your cluster.
+                      The animation loops the selected operation so you can compare what moves outside the page with what changes inside it.
                     </div>
                   </div>
                 }
