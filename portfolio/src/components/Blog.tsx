@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useRef } from "react";
 import BlogThreeBackdrop from "@/components/BlogThreeBackdrop";
 
@@ -32,7 +33,7 @@ export default function Blog() {
       }}
       ref={ref}
     >
-      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 60px" }}>
+      <div className="site-container">
         <div className="reveal" style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "24px" }}>
           <span
             style={{
@@ -96,7 +97,7 @@ export default function Blog() {
                 </span>
               ))}
             </div>
-            <a
+            <Link
               href="/blog"
               style={{
                 fontSize: "11px",
@@ -123,7 +124,7 @@ export default function Blog() {
               }}
             >
               Read our notes ↗
-            </a>
+            </Link>
           </div>
 
           <div className="reveal">

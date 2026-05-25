@@ -32,7 +32,7 @@ export default function Portfolio() {
       }}
       ref={ref}
     >
-      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 60px" }}>
+      <div className="site-container">
         <div className="reveal" style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "24px" }}>
           <span
             style={{

@@ -35,7 +35,7 @@ export default function Contact() {
       padding: "100px 0 80px",
       backgroundColor: "#F2EDE4",
     }} ref={ref}>
-      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 60px" }}>
+      <div className="site-container">
 
         {/* Label */}
         <div className="reveal" style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "24px" }}>

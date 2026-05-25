@@ -24,7 +24,7 @@ const posts: Post[] = [
 
 export default function BlogPage() {
   return (
-    <main style={{ minHeight: "100vh", backgroundColor: "#F2EDE4", color: "#0A0A0A", padding: "120px 24px 80px" }}>
+    <main className="blog-page-main">
       <div style={{ maxWidth: "820px", margin: "0 auto" }}>
         <Link
           href="/"

@@ -1,7 +1,9 @@
 "use client";
 import { useEffect, useRef, type MouseEvent } from "react";
 
-const RESUME_HREF = "/NguyenChiKhanh_CV.pdf";
+import { resumePdfHref } from "@/lib/site";
+
+const RESUME_HREF = resumePdfHref();
 
 const projects = [
   {
@@ -60,7 +62,7 @@ export default function Projects() {
       padding: "100px 0",
       backgroundColor: "#F2EDE4",
     }} ref={ref}>
-      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 60px" }}>
+      <div className="site-container">
 
         {/* Header */}
         <div className="reveal" style={{
@@ -117,7 +119,7 @@ export default function Projects() {
         </div>
 
         {/* Project grid — 2x2 */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0" }}>
+        <div className="projects-grid">
           {projects.map((p, i) => {
             const isLeft = i % 2 === 0;
             const isTop = i < 2;

@@ -59,17 +59,16 @@ export default function Hero() {
       }} />
 
       {/* Content */}
-      <div style={{
-        maxWidth: "1280px",
-        width: "100%",
-        margin: "0 auto",
-        padding: "120px 60px 80px",
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        position: "relative",
-      }}>
+      <div
+        className="hero-inner"
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          position: "relative",
+        }}
+      >
 
         {/* Available badge */}
         <div className="anim-fade-up delay-100" style={{
@@ -170,27 +169,34 @@ export default function Hero() {
         </div>
 
         {/* Ghost number */}
-        <div style={{
-          position: "absolute", right: "60px", bottom: "0",
+        <div
+          className="hero-deco-num"
+          style={{
+          position: "absolute", right: "clamp(16px, 4vw, 60px)", bottom: "0",
           fontSize: "clamp(8rem, 20vw, 18rem)", fontWeight: 900, color: "#0A0A0A",
           opacity: 0.04, lineHeight: 1, userSelect: "none", pointerEvents: "none",
           fontFamily: "'Bebas Neue', sans-serif",
         }}>01</div>
 
         {/* Dot grid */}
-        <div style={{
-          position: "absolute", right: "64px", top: "130px",
+        <div
+          className="hero-deco-dots"
+          style={{
+          position: "absolute", right: "clamp(16px, 4vw, 64px)", top: "130px",
           display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "10px",
           opacity: 0.15,
-        }}>
+        }}
+        >
           {Array.from({ length: 36 }).map((_, i) => (
             <div key={i} style={{ width: 5, height: 5, borderRadius: "50%", backgroundColor: "#0A0A0A" }} />
           ))}
         </div>
 
         {/* Scroll indicator */}
-        <div style={{
-          position: "absolute", bottom: "32px", left: "60px",
+        <div
+          className="hero-scroll-hint"
+          style={{
+          position: "absolute", bottom: "32px", left: "clamp(16px, 4vw, 60px)",
           display: "flex", alignItems: "center", gap: "12px",
           fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.25em",
           color: "#8A8A8A", fontFamily: "'Space Mono', monospace",

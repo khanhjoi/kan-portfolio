@@ -266,7 +266,7 @@ export default function HowDatabasesArticle() {
   const heapSection = sectionsById.get("heap-page");
 
   return (
-    <main style={{ backgroundColor: "#F2EDE4", color: ink, minHeight: "100vh", padding: "100px 24px 88px" }}>
+    <main className="article-main" style={{ backgroundColor: "#F2EDE4", color: ink, minHeight: "100vh" }}>
       <article style={{ maxWidth: "1200px", margin: "0 auto" }}>
         <Link
           href="/blog"

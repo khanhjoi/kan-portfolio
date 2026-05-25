@@ -74,7 +74,7 @@ export default function Skills() {
       padding: "100px 0",
       backgroundColor: "#F2EDE4",
     }} ref={ref}>
-      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 60px" }}>
+      <div className="site-container">
 
         {/* Label */}
         <div className="reveal" style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "24px" }}>
@@ -95,10 +95,7 @@ export default function Skills() {
         </h2>
 
         {/* 4-col skill bars */}
-        <div className="reveal" style={{
-          display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
-          gap: "0", marginBottom: "48px",
-        }}>
+        <div className="reveal skills-grid" style={{ marginBottom: "48px" }}>
           {skillGroups.map((group, gi) => (
             <div key={group.category} style={{
               border: "2.5px solid #0A0A0A",

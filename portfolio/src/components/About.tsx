@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
+import { resumePdfHref } from "@/lib/site";
 
 const facts = [
   { label: "Experience", value: "2+ Years" },
@@ -34,7 +35,7 @@ export default function About() {
       padding: "100px 0",
       backgroundColor: "#F2EDE4",
     }} ref={ref}>
-      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 60px" }}>
+      <div className="site-container">
 
         {/* Label */}
         <div className="reveal" style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "64px" }}>
@@ -44,7 +45,7 @@ export default function About() {
           <div style={{ height: "2px", width: "64px", backgroundColor: "#0A0A0A" }} />
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0" }}>
+        <div className="grid-2-col">
 
           {/* Left */}
           <div className="reveal" style={{
@@ -70,9 +71,13 @@ export default function About() {
             <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
               {[
                 { label: "Let's Talk →", href: "#contact", bg: "transparent", hoverBg: "#FF2800", hoverColor: "white" },
-                { label: "Resume ↗", href: "/NguyenChiKhanh_CV.pdf", bg: "transparent", hoverBg: "#FFE500", hoverColor: "#0A0A0A" },
+                { label: "Resume ↗", href: resumePdfHref(), external: true, bg: "transparent", hoverBg: "#FFE500", hoverColor: "#0A0A0A" },
               ].map(btn => (
-                <a key={btn.label} href={btn.href} style={{
+                <a
+                  key={btn.label}
+                  href={btn.href}
+                  {...("external" in btn && btn.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  style={{
                   border: "2.5px solid #0A0A0A", padding: "10px 24px",
                   fontSize: "11px", fontWeight: "bold", textTransform: "uppercase",
                   letterSpacing: "0.15em", textDecoration: "none", color: "#0A0A0A",
