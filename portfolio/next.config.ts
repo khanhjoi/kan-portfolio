@@ -1,4 +1,4 @@
-const repoName = "portfolio";
+const repoName = "kan-portfolio";
 
 const nextConfig = {
   output: "export",
