@@ -7,14 +7,13 @@ import CollapsiblePanel from "@/components/blog/CollapsiblePanel";
 import SceneGate from "@/components/blog/SceneGate";
 import { useLazyMountScene } from "@/components/blog/useLazyMountScene";
 import HeapPageScene, { HEAP_ACTION_META, type HeapPageAction } from "@/components/blog/scenes/HeapPageScene";
-import SharedBuffersScene from "@/components/blog/scenes/SharedBuffersScene";
-import type { BufferFlowMode } from "@/components/blog/scenes/SharedBuffersScene";
-import ToastScene from "@/components/blog/scenes/ToastScene";
 import {
   articleIntro,
   articleSections,
   furtherReading,
   type ArticleSection,
+  type PagePart,
+  type RowOperationGuide,
 } from "@/content/how-databases-store-data";
 
 const prose: CSSProperties = {
@@ -140,55 +139,73 @@ function SectionSidebar({
   );
 }
 
-function ControlSlider({
-  label,
-  value,
-  min,
-  max,
-  step,
-  onChange,
-  hint,
-}: {
-  label: string;
-  value: number;
-  min: number;
-  max: number;
-  step: number;
-  onChange: (v: number) => void;
-  hint?: string;
-}) {
+function PartExplainer({ part }: { part: PagePart }) {
   return (
-    <label style={{ display: "block", marginBottom: "14px", cursor: "pointer" }}>
-      <span
+    <div
+      style={{
+        border: "2px solid #0A0A0A",
+        padding: "14px 16px",
+        marginBottom: "12px",
+        backgroundColor: "rgba(255, 255, 255, 0.4)",
+      }}
+    >
+      <h4
         style={{
-          fontSize: "10px",
-          letterSpacing: "0.16em",
-          textTransform: "uppercase",
-          fontWeight: "bold",
           fontFamily: "'Space Mono', monospace",
-          display: "block",
-          marginBottom: "6px",
+          fontSize: "11px",
+          fontWeight: "bold",
+          letterSpacing: "0.12em",
+          textTransform: "uppercase",
+          margin: "0 0 8px",
+          color: red,
         }}
       >
-        {label}
-      </span>
-      <input
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
+        {part.title}
+        {part.sceneLabel ? (
+          <span style={{ color: ink, fontWeight: 400, marginLeft: "8px", opacity: 0.65 }}>
+            — hover “{part.sceneLabel}” in the figure
+          </span>
+        ) : null}
+      </h4>
+      <p style={{ ...prose, fontSize: "13px", margin: 0, opacity: 0.9 }}>{part.body}</p>
+    </div>
+  );
+}
+
+function OperationExplainer({ op, active }: { op: RowOperationGuide; active: boolean }) {
+  const meta = HEAP_ACTION_META[op.id];
+  return (
+    <div
+      id={`op-${op.id}`}
+      style={{
+        border: `2.5px solid ${active ? meta.accent : ink}`,
+        padding: "16px 18px",
+        marginBottom: "14px",
+        backgroundColor: active ? "rgba(255, 229, 0, 0.12)" : "rgba(255, 255, 255, 0.35)",
+        boxShadow: active ? `4px 4px 0 ${meta.accent}` : "none",
+      }}
+    >
+      <h4
         style={{
-          width: "100%",
-          accentColor: red,
-          height: "6px",
+          fontFamily: "'Bebas Neue', sans-serif",
+          fontSize: "1.35rem",
+          fontWeight: 900,
+          textTransform: "uppercase",
+          margin: "0 0 10px",
+          color: active ? red : ink,
         }}
-      />
-      {hint ? (
-        <span style={{ fontSize: "11px", opacity: 0.72, display: "block", marginTop: "6px" }}>{hint}</span>
-      ) : null}
-    </label>
+      >
+        {op.title}
+      </h4>
+      <p style={{ ...prose, fontSize: "13px", marginBottom: "10px", opacity: 0.9 }}>{op.summary}</p>
+      <ol style={{ ...prose, fontSize: "12px", paddingLeft: "20px", margin: 0 }}>
+        {op.steps.map((step) => (
+          <li key={step} style={{ marginBottom: "6px" }}>
+            {step}
+          </li>
+        ))}
+      </ol>
+    </div>
   );
 }
 
@@ -233,54 +250,11 @@ function HeapActionToggle({
   );
 }
 
-function ModeToggle({
-  value,
-  onChange,
-}: {
-  value: BufferFlowMode;
-  onChange: (m: BufferFlowMode) => void;
-}) {
-  const modes: BufferFlowMode[] = ["auto", "hit", "miss"];
-  return (
-    <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "8px" }}>
-      {modes.map((m) => (
-        <button
-          key={m}
-          type="button"
-          onClick={() => onChange(m)}
-          style={{
-            flex: "1 1 auto",
-            minWidth: "72px",
-            padding: "8px 10px",
-            fontSize: "10px",
-            fontWeight: "bold",
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            fontFamily: "'Space Mono', monospace",
-            border: `2px solid ${ink}`,
-            backgroundColor: value === m ? ink : "transparent",
-            color: value === m ? "#FFE500" : ink,
-            cursor: "pointer",
-          }}
-        >
-          {m === "auto" ? "Auto demo" : m === "hit" ? "Cache hit" : "Cache miss"}
-        </button>
-      ))}
-    </div>
-  );
-}
-
 export default function HowDatabasesArticle() {
   const [heapAction, setHeapAction] = useState<HeapPageAction>("insert");
-  const [toastChunks, setToastChunks] = useState(4);
-  const [bufferMode, setBufferMode] = useState<BufferFlowMode>("auto");
 
   const heapSectionRef = useRef<HTMLElement>(null);
-  const toastSectionRef = useRef<HTMLElement>(null);
-  const bufferSectionRef = useRef<HTMLElement>(null);
   const heapMount = useLazyMountScene(heapSectionRef);
-  const toastMount = useLazyMountScene(toastSectionRef);
-  const bufferMount = useLazyMountScene(bufferSectionRef);
 
   const sectionsById = useMemo(() => {
     const m = new Map<string, ArticleSection>();
@@ -289,6 +263,7 @@ export default function HowDatabasesArticle() {
   }, []);
 
   const heapActionMeta = HEAP_ACTION_META[heapAction];
+  const heapSection = sectionsById.get("heap-page");
 
   return (
     <main style={{ backgroundColor: "#F2EDE4", color: ink, minHeight: "100vh", padding: "100px 24px 88px" }}>
@@ -343,57 +318,76 @@ export default function HowDatabasesArticle() {
         ))}
 
         <p style={{ ...prose, fontSize: "13px", opacity: 0.75, marginBottom: "48px", maxWidth: "820px" }}>
-          Figures load when you scroll near them (or tap <strong style={{ fontWeight: 700 }}>Load 3D diagram</strong>) so the page stays light
-          until you need the WebGL scenes. Drag each canvas to orbit; open the yellow research drawer on the right when you want citations
-          and model mapping. Collapse <strong style={{ fontWeight: 700 }}>Simulation controls</strong> anytime to focus on reading.
+          The figure loads when you scroll near it (or tap <strong style={{ fontWeight: 700 }}>Load 3D diagram</strong>). Drag to orbit;
+          hover labeled blocks for definitions. Use the four operation buttons to match the animation with the written steps below.
         </p>
 
-        {/* Section 1 */}
-        {sectionsById.get("heap-page") ? (
+        {heapSection ? (
           <section ref={heapSectionRef} style={{ marginBottom: "72px" }} aria-labelledby="sec-heap">
             <div className="blog-section-layout">
               <div>
                 <h2 id="sec-heap" style={{ ...h2 }}>
-                  {sectionsById.get("heap-page")!.title}
+                  {heapSection.title}
                 </h2>
-                {sectionsById.get("heap-page")!.intro.map((para) => (
+                {heapSection.intro.map((para) => (
                   <p key={para.slice(0, 36)} style={{ ...prose, marginBottom: "16px" }}>
                     {para}
                   </p>
                 ))}
 
-                <SceneGate
-                  active={heapMount.active}
-                  onUnlock={heapMount.unlock}
-                  label={sectionsById.get("heap-page")!.shortLabel}
-                >
+                <SceneGate active={heapMount.active} onUnlock={heapMount.unlock} label={heapSection.shortLabel}>
                   <HeapPageScene actionMode={heapAction} />
                 </SceneGate>
 
                 <CollapsiblePanel
                   defaultOpen
-                  summary="Simulation controls · Heap page"
+                  summary="Animation controls · row operations"
                   style={{ marginTop: "14px", border: "2px solid #0A0A0A", backgroundColor: "rgba(255, 229, 0, 0.15)" }}
                   className="blog-collapsible-panel blog-controls-panel"
                 >
                   <HeapActionToggle value={heapAction} onChange={setHeapAction} />
-                  <p style={{ ...prose, fontSize: "13px", marginBottom: "10px", opacity: 0.86 }}>{heapActionMeta.summary}</p>
-                  <ul style={{ ...prose, fontSize: "12px", paddingLeft: "18px", marginBottom: 0 }}>
-                    {heapActionMeta.steps.map((step) => (
-                      <li key={step} style={{ marginBottom: "6px" }}>
-                        {step}
-                      </li>
-                    ))}
-                  </ul>
+                  <p style={{ ...prose, fontSize: "13px", marginBottom: 0, opacity: 0.86 }}>
+                    {heapActionMeta.summary}
+                  </p>
                 </CollapsiblePanel>
 
                 <p style={{ ...prose, fontSize: "13px", opacity: 0.72, marginTop: "14px" }}>
-                  {sectionsById.get("heap-page")!.figureCaption}
+                  {heapSection.figureCaption}
                 </p>
+
+                <CollapsiblePanel
+                  defaultOpen={false}
+                  summary="Parts of one heap page"
+                  style={{ marginTop: "14px" }}
+                  className="blog-collapsible-panel"
+                >
+                  <p style={{ ...prose, fontSize: "13px", marginBottom: "16px", opacity: 0.85 }}>
+                    These regions match the classic PostgreSQL page diagram and the 3D model. External modules (FSM, buffer pool, WAL, disk)
+                    sit beside the page because row operations reach them before bytes change inside the slab.
+                  </p>
+                  {heapSection.pageParts.map((part) => (
+                    <PartExplainer key={part.id} part={part} />
+                  ))}
+                </CollapsiblePanel>
+
+                <CollapsiblePanel
+                  defaultOpen={false}
+                  summary="How a row is read or modified through the page"
+                  style={{ marginTop: "12px" }}
+                  className="blog-collapsible-panel"
+                >
+                  <p style={{ ...prose, fontSize: "13px", marginBottom: "16px", opacity: 0.85 }}>
+                    Based on the research notes for PostgreSQL heap storage: each operation below is what the animation is trying to show.
+                    The highlighted card matches the active button above.
+                  </p>
+                  {heapSection.rowOperations.map((op) => (
+                    <OperationExplainer key={op.id} op={op} active={heapAction === op.id} />
+                  ))}
+                </CollapsiblePanel>
               </div>
 
               <SectionSidebar
-                section={sectionsById.get("heap-page")!}
+                section={heapSection}
                 statsPanel={
                   <div
                     style={{
@@ -415,157 +409,7 @@ export default function HowDatabasesArticle() {
                       </div>
                     ))}
                     <div style={{ marginTop: "8px", fontSize: "11px", opacity: 0.75 }}>
-                      The animation loops the selected operation so you can compare what moves outside the page with what changes inside it.
-                    </div>
-                  </div>
-                }
-              />
-            </div>
-          </section>
-        ) : null}
-
-        {/* Section 2 */}
-        {sectionsById.get("toast") ? (
-          <section ref={toastSectionRef} style={{ marginBottom: "72px" }} aria-labelledby="sec-toast">
-            <div className="blog-section-layout">
-              <div>
-                <h2 id="sec-toast" style={{ ...h2 }}>
-                  {sectionsById.get("toast")!.title}
-                </h2>
-                {sectionsById.get("toast")!.intro.map((para) => (
-                  <p key={para.slice(0, 36)} style={{ ...prose, marginBottom: "16px" }}>
-                    {para}
-                  </p>
-                ))}
-
-                <SceneGate
-                  active={toastMount.active}
-                  onUnlock={toastMount.unlock}
-                  label={sectionsById.get("toast")!.shortLabel}
-                >
-                  <ToastScene chunkCount={toastChunks} />
-                </SceneGate>
-
-                <CollapsiblePanel
-                  defaultOpen
-                  summary="Simulation controls · TOAST"
-                  style={{ marginTop: "14px", border: "2px solid #0A0A0A", backgroundColor: "rgba(255, 229, 0, 0.15)" }}
-                  className="blog-collapsible-panel blog-controls-panel"
-                >
-                  <ControlSlider
-                    label="Toast chunk pages visible"
-                    min={2}
-                    max={6}
-                    step={1}
-                    value={toastChunks}
-                    onChange={setToastChunks}
-                    hint="Each increment adds another pg_toast-style page mesh and arrow — mirroring how wide values fan out."
-                  />
-                </CollapsiblePanel>
-
-                <p style={{ ...prose, fontSize: "13px", opacity: 0.72, marginTop: "14px" }}>
-                  {sectionsById.get("toast")!.figureCaption}
-                </p>
-              </div>
-
-              <SectionSidebar
-                section={sectionsById.get("toast")!}
-                statsPanel={
-                  <div
-                    style={{
-                      fontFamily: "'Space Mono', monospace",
-                      fontSize: "12px",
-                      lineHeight: 1.55,
-                      borderLeft: `3px solid ${red}`,
-                      paddingLeft: "12px",
-                    }}
-                  >
-                    <div>
-                      <span style={{ opacity: 0.65 }}>Active toast pages · </span>
-                      <strong>{toastChunks}</strong>
-                    </div>
-                    <div style={{ marginTop: "8px", fontSize: "11px", opacity: 0.75 }}>
-                      Large payloads usually split until each chunk respects toast storage rules — this slider only changes how many pages
-                      you see in the scene.
-                    </div>
-                  </div>
-                }
-              />
-            </div>
-          </section>
-        ) : null}
-
-        {/* Section 3 */}
-        {sectionsById.get("shared-buffers") ? (
-          <section ref={bufferSectionRef} style={{ marginBottom: "72px" }} aria-labelledby="sec-buffers">
-            <div className="blog-section-layout">
-              <div>
-                <h2 id="sec-buffers" style={{ ...h2 }}>
-                  {sectionsById.get("shared-buffers")!.title}
-                </h2>
-                {sectionsById.get("shared-buffers")!.intro.map((para) => (
-                  <p key={para.slice(0, 36)} style={{ ...prose, marginBottom: "16px" }}>
-                    {para}
-                  </p>
-                ))}
-
-                <SceneGate
-                  active={bufferMount.active}
-                  onUnlock={bufferMount.unlock}
-                  label={sectionsById.get("shared-buffers")!.shortLabel}
-                >
-                  <SharedBuffersScene flowMode={bufferMode} />
-                </SceneGate>
-
-                <CollapsiblePanel
-                  defaultOpen
-                  summary="Simulation controls · Shared buffers"
-                  style={{ marginTop: "14px", border: "2px solid #0A0A0A", backgroundColor: "rgba(255, 229, 0, 0.15)" }}
-                  className="blog-collapsible-panel blog-controls-panel"
-                >
-                  <p
-                    style={{
-                      fontSize: "10px",
-                      letterSpacing: "0.16em",
-                      textTransform: "uppercase",
-                      fontWeight: "bold",
-                      fontFamily: "'Space Mono', monospace",
-                      marginBottom: "10px",
-                    }}
-                  >
-                    Query path (updates packet color & orbit)
-                  </p>
-                  <ModeToggle value={bufferMode} onChange={setBufferMode} />
-                  <span style={{ fontSize: "11px", opacity: 0.75, display: "block", marginTop: "10px" }}>
-                    Green sphere stays inside shared buffers on hits; orange traces disk IO on misses.
-                  </span>
-                </CollapsiblePanel>
-
-                <p style={{ ...prose, fontSize: "13px", opacity: 0.72, marginTop: "14px" }}>
-                  {sectionsById.get("shared-buffers")!.figureCaption}
-                </p>
-              </div>
-
-              <SectionSidebar
-                section={sectionsById.get("shared-buffers")!}
-                statsPanel={
-                  <div
-                    style={{
-                      fontFamily: "'Space Mono', monospace",
-                      fontSize: "12px",
-                      lineHeight: 1.55,
-                      borderLeft: `3px solid ${red}`,
-                      paddingLeft: "12px",
-                    }}
-                  >
-                    <div>
-                      <span style={{ opacity: 0.65 }}>Active mode · </span>
-                      <strong>
-                        {bufferMode === "auto" ? "Alternating demo" : bufferMode === "hit" ? "Locked hit path" : "Locked miss path"}
-                      </strong>
-                    </div>
-                    <div style={{ marginTop: "8px", fontSize: "11px", opacity: 0.75 }}>
-                      Toggle matches how you might benchmark buffer-cache residency versus cold reads from disk.
+                      Read mode alternates cache hit and cache miss so you can compare both buffer paths.
                     </div>
                   </div>
                 }

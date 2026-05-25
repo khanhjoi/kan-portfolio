@@ -270,6 +270,7 @@ export default function HeapPageScene({ actionMode = "insert" }: HeapPageScenePr
       return new THREE.LineBasicMaterial({ color: ink });
     }
 
+    // create a block with a label, position, size, and color
     function makeBlock(
       label: string,
       cx: number,
@@ -535,7 +536,7 @@ export default function HeapPageScene({ actionMode = "insert" }: HeapPageScenePr
 
     const loop = () => {
       frame = requestAnimationFrame(loop);
-      const elapsed = (performance.now() - t0) / 1000;
+      const elapsed = (performance.now() - t0) / 2000;
       const mode = modeRef.current;
 
       resettableMeshes.forEach(resetMesh);

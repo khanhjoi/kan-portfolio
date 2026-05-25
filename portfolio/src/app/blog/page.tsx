@@ -17,7 +17,7 @@ const posts: Post[] = [
   {
     slug: "/blog/how-databases-store-data",
     title: "How databases actually store data internally",
-    dek: "Heap pages, ItemId directories, TOAST overflow tables, and shared_buffers — each with an interactive Three.js figure you can orbit.",
+    dek: "Heap page layout and how PostgreSQL inserts, reads, deletes, and updates rows — with an interactive Three.js figure you can orbit.",
     tag: "PostgreSQL",
   },
 ];

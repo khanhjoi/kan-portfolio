@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 const roles = ["Software Developer", "UI Craftsman", "Web Developer", "Data Engineer"];
 
 const marqueeItems = [
-  "NEXT.JS","★","REACT","★","TAILWIND","★","TYPESCRIPT","★",
-  "FRAMER MOTION","★","CSS","★","NODE.JS","★","FIGMA","★",
-  "NEXT.JS","★","REACT","★","TAILWIND","★","TYPESCRIPT","★",
-  "FRAMER MOTION","★","CSS","★","NODE.JS","★","FIGMA","★",
+  "NEXT.JS","★","REACT","★","TAILWIND","★","TYPESCRIPT","★","CSS",
+  "★","NODE.JS","★","FIGMA","★","GITHUB","★","DOCKER","★",
+  "NEXT.JS","★","REACT","★","TAILWIND","★","SPRING BOOT","★",
+  "FRAMER MOTION","★","CSS","★","NODE.JS","★","JAVA","★",
 ];
 
 export default function Hero() {

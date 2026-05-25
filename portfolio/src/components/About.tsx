@@ -63,14 +63,9 @@ export default function About() {
             </h2>
 
             <p style={{ fontSize: "13px", lineHeight: 2, color: "#333", marginBottom: "20px", fontFamily: "'Space Mono', monospace" }}>
-              I'm a frontend developer who believes the web should be fast,
+              I'm a Software Engineer who believes the web should be fast,
               purposeful, and a little bit opinionated. I've been crafting
-              digital experiences for <span style={{ backgroundColor: "#FFE500", padding: "0 4px", fontWeight: "bold" }}>X+ years</span>.
-            </p>
-            <p style={{ fontSize: "13px", lineHeight: 2, color: "#333", marginBottom: "40px", fontFamily: "'Space Mono', monospace" }}>
-              I care deeply about performance, accessibility, and that satisfying
-              moment when an animation feels just right. Based in{" "}
-              <span style={{ backgroundColor: "#FFE500", padding: "0 4px", fontWeight: "bold" }}>Your City</span>.
+              digital experiences for <span style={{ backgroundColor: "#FFE500", padding: "0 4px", fontWeight: "bold" }}>2+ years</span>.
             </p>
 
             <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
