@@ -2,10 +2,9 @@
 import { useEffect, useRef } from "react";
 
 const facts = [
-  { label: "Experience", value: "X+ Years" },
-  { label: "Projects Shipped", value: "20+" },
-  { label: "Focus", value: "React / Next.js" },
-  { label: "Location", value: "Your City 📍" },
+  { label: "Experience", value: "2+ Years" },
+  { label: "Focus", value: "Javascript / Postgres/ Java / Docker/ CICD" },
+  { label: "Location", value: "Ho Chi Minh City" },
   { label: "Status", value: "Open to Work ✦" },
 ];
 
@@ -71,7 +70,7 @@ export default function About() {
             <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
               {[
                 { label: "Let's Talk →", href: "#contact", bg: "transparent", hoverBg: "#FF2800", hoverColor: "white" },
-                { label: "Resume ↗", href: "/resume.pdf", bg: "transparent", hoverBg: "#FFE500", hoverColor: "#0A0A0A" },
+                { label: "Resume ↗", href: "/NguyenChiKhanh_CV.pdf", bg: "transparent", hoverBg: "#FFE500", hoverColor: "#0A0A0A" },
               ].map(btn => (
                 <a key={btn.label} href={btn.href} style={{
                   border: "2.5px solid #0A0A0A", padding: "10px 24px",
