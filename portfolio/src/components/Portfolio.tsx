@@ -116,7 +116,7 @@ export default function Portfolio() {
                 View selected work
               </a>
               <a
-                href="https://github.com/you"
+                href="https://github.com/khanhjoi"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -170,8 +170,8 @@ export default function Portfolio() {
             </p>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "18px" }}>
               {[
-                { k: "Focus", v: "Product UI, data-heavy apps, polished marketing sites" },
-                { k: "Stack", v: "React, Next.js, TypeScript, Node, Postgres-friendly APIs" },
+                { k: "Focus", v: "Product UI, data-heavy apps, polished marketing sites, Microservices" },
+                { k: "Stack", v: "Microservices, React, TypeScript, Node.js, Java, Docker, Postgres, CICD" },
                 { k: "Principles", v: "Accessibility, performance budgets, maintainable systems" },
               ].map((row) => (
                 <li key={row.k}>
