@@ -88,7 +88,7 @@ export default function Navbar() {
           ))}
 
           {/* Resume */}
-          <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" style={{
+          <a href="/NguyenChiKhanh_CV.pdf" target="_blank" rel="noopener noreferrer" style={{
             display: "block", padding: "6px 16px", marginLeft: "12px",
             fontSize: "11px", fontWeight: "bold", textTransform: "uppercase",
             letterSpacing: "0.18em", textDecoration: "none",

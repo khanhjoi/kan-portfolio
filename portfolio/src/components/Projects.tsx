@@ -1,38 +1,36 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type MouseEvent } from "react";
+
+const RESUME_HREF = "/NguyenChiKhanh_CV.pdf";
 
 const projects = [
   {
     num: "01",
-    title: "Project Alpha",
-    desc: "A fast, accessible web app built with Next.js and TypeScript. Focused on performance and developer experience.",
-    tags: ["Next.js", "TypeScript", "Tailwind"],
-    link: "#",
-    year: "2024",
+    title: "Blueprint (HRM)",
+    desc: "Human Resource Management platform for CLV — core system for staff records and internal HR workflows. Refactored legacy code and shipped features such as certificate management.",
+    tags: ["Spring Boot", "Oracle", "Webix"],
+    year: "2025",
   },
   {
     num: "02",
-    title: "Project Beta",
-    desc: "Full-stack dashboard with real-time data visualization, authentication, and role-based access control.",
-    tags: ["React", "Node.js", "Recharts"],
-    link: "#",
-    year: "2024",
+    title: "AMS",
+    desc: "Asset Management System for IT/HR/account assets (devices, AI tools, licenses). NestJS backend with queue-based email processing; Next.js frontend with ongoing legacy modernization.",
+    tags: ["NestJS", "Next.js", "PostgreSQL"],
+    year: "2025",
   },
   {
     num: "03",
-    title: "Project Gamma",
-    desc: "E-commerce storefront with a custom CMS, cart system, and fluid page transitions.",
-    tags: ["Next.js", "Sanity", "Framer Motion"],
-    link: "#",
-    year: "2023",
+    title: "Shipping Route Mgmt",
+    desc: "Microservices platform with NestJS services (API Gateway, User Service) and a Next.js UI. gRPC, Kafka, and REST between services; Redis caching; reusable NPM libraries cut duplication ~30%.",
+    tags: ["NestJS", "Kafka", "gRPC"],
+    year: "2024",
   },
   {
     num: "04",
-    title: "Project Delta",
-    desc: "Design system and component library with 50+ accessible UI components and full Storybook docs.",
-    tags: ["React", "Storybook", "SCSS"],
-    link: "#",
-    year: "2023",
+    title: "CPS",
+    desc: "Internal consultant platform — NestJS clean architecture with GraphQL APIs on PostgreSQL; Next.js UI with Tailwind and Ant Design. Maintenance and cross-module bug fixes.",
+    tags: ["GraphQL", "NestJS", "Next.js"],
+    year: "2025",
   },
 ];
 
@@ -86,18 +84,35 @@ export default function Projects() {
               Selected<br /><span style={{ color: "#FF2800" }}>Projects</span>
             </h2>
           </div>
-          <a href="https://github.com/you" target="_blank" rel="noopener noreferrer"
+          <a
+            href={RESUME_HREF}
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
-              fontSize: "11px", fontWeight: "bold", textTransform: "uppercase",
-              letterSpacing: "0.18em", border: "2.5px solid #0A0A0A",
-              padding: "10px 20px", textDecoration: "none", color: "#0A0A0A",
-              transition: "all 0.15s", fontFamily: "'Space Mono', monospace",
+              fontSize: "11px",
+              fontWeight: "bold",
+              textTransform: "uppercase",
+              letterSpacing: "0.18em",
+              border: "2.5px solid #0A0A0A",
+              padding: "10px 20px",
+              textDecoration: "none",
+              color: "#0A0A0A",
+              transition: "all 0.15s",
+              fontFamily: "'Space Mono', monospace",
               alignSelf: "flex-end",
             }}
-            onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.backgroundColor = "#0A0A0A"; el.style.color = "#F2EDE4"; }}
-            onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.backgroundColor = "transparent"; el.style.color = "#0A0A0A"; }}
+            onMouseEnter={(e) => {
+              const el = e.currentTarget as HTMLElement;
+              el.style.backgroundColor = "#FFE500";
+              el.style.color = "#0A0A0A";
+            }}
+            onMouseLeave={(e) => {
+              const el = e.currentTarget as HTMLElement;
+              el.style.backgroundColor = "transparent";
+              el.style.color = "#0A0A0A";
+            }}
           >
-            All on GitHub ↗
+            Resume ↗
           </a>
         </div>
 
@@ -106,43 +121,58 @@ export default function Projects() {
           {projects.map((p, i) => {
             const isLeft = i % 2 === 0;
             const isTop = i < 2;
+            const cardStyle = {
+              display: "block" as const,
+              textDecoration: "none",
+              color: "#0A0A0A",
+              border: "2.5px solid #0A0A0A",
+              borderRight: isLeft ? "none" : "2.5px solid #0A0A0A",
+              borderBottom: isTop ? "none" : "2.5px solid #0A0A0A",
+              padding: "48px",
+              position: "relative" as const,
+              overflow: "hidden" as const,
+              transition: "all 0.3s",
+              transitionDelay: `${i * 80}ms`,
+              cursor: "default",
+            };
+
+            const onCardEnter = (e: MouseEvent<HTMLElement>) => {
+              const el = e.currentTarget;
+              el.style.backgroundColor = "#0A0A0A";
+              el.style.color = "#F2EDE4";
+              const num = el.querySelector(".proj-num") as HTMLElement;
+              const tags = el.querySelectorAll(".proj-tag") as NodeListOf<HTMLElement>;
+              const desc = el.querySelector(".proj-desc") as HTMLElement;
+              if (num) num.style.color = "#FF2800";
+              if (desc) desc.style.color = "#999";
+              tags.forEach((t) => {
+                t.style.borderColor = "#444";
+                t.style.color = "#777";
+              });
+            };
+
+            const onCardLeave = (e: MouseEvent<HTMLElement>) => {
+              const el = e.currentTarget;
+              el.style.backgroundColor = "transparent";
+              el.style.color = "#0A0A0A";
+              const num = el.querySelector(".proj-num") as HTMLElement;
+              const tags = el.querySelectorAll(".proj-tag") as NodeListOf<HTMLElement>;
+              const desc = el.querySelector(".proj-desc") as HTMLElement;
+              if (num) num.style.color = "#0A0A0A";
+              if (desc) desc.style.color = "#444";
+              tags.forEach((t) => {
+                t.style.borderColor = "#0A0A0A";
+                t.style.color = "#0A0A0A";
+              });
+            };
+
             return (
-              <a
+              <article
                 key={p.num}
-                href={p.link}
                 className="reveal project-card"
-                style={{
-                  display: "block", textDecoration: "none", color: "#0A0A0A",
-                  border: "2.5px solid #0A0A0A",
-                  borderRight: isLeft ? "none" : "2.5px solid #0A0A0A",
-                  borderBottom: isTop ? "none" : "2.5px solid #0A0A0A",
-                  padding: "48px",
-                  position: "relative", overflow: "hidden",
-                  transition: "all 0.3s",
-                  transitionDelay: `${i * 80}ms`,
-                }}
-                onMouseEnter={e => {
-                  const el = e.currentTarget as HTMLElement;
-                  el.style.backgroundColor = "#0A0A0A";
-                  el.style.color = "#F2EDE4";
-                  const num = el.querySelector(".proj-num") as HTMLElement;
-                  const tags = el.querySelectorAll(".proj-tag") as NodeListOf<HTMLElement>;
-                  const desc = el.querySelector(".proj-desc") as HTMLElement;
-                  if (num) num.style.color = "#FF2800";
-                  if (desc) desc.style.color = "#999";
-                  tags.forEach(t => { t.style.borderColor = "#444"; t.style.color = "#777"; });
-                }}
-                onMouseLeave={e => {
-                  const el = e.currentTarget as HTMLElement;
-                  el.style.backgroundColor = "transparent";
-                  el.style.color = "#0A0A0A";
-                  const num = el.querySelector(".proj-num") as HTMLElement;
-                  const tags = el.querySelectorAll(".proj-tag") as NodeListOf<HTMLElement>;
-                  const desc = el.querySelector(".proj-desc") as HTMLElement;
-                  if (num) num.style.color = "#0A0A0A";
-                  if (desc) desc.style.color = "#444";
-                  tags.forEach(t => { t.style.borderColor = "#0A0A0A"; t.style.color = "#0A0A0A"; });
-                }}
+                style={cardStyle}
+                onMouseEnter={onCardEnter}
+                onMouseLeave={onCardLeave}
               >
                 {/* Top row */}
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
@@ -189,7 +219,7 @@ export default function Projects() {
                     </span>
                   ))}
                 </div>
-              </a>
+              </article>
             );
           })}
         </div>
