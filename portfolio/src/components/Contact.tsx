@@ -2,11 +2,13 @@
 import { useEffect, useRef } from "react";
 
 const socials = [
-  { label: "Email", handle: "you@email.com", href: "mailto:you@email.com" },
-  { label: "GitHub", handle: "github.com/you", href: "https://github.com/you" },
-  { label: "LinkedIn", handle: "linkedin.com/in/you", href: "https://linkedin.com/in/you" },
-  { label: "Twitter / X", handle: "@yourhandle", href: "https://x.com/yourhandle" },
+  { label: "Email", handle: "khanhjoi1@mail.com", href: "mailto:khanhjoi1@mail.com" },
+  { label: "GitHub", handle: "github.com/khanhjoi", href: "https://github.com/khanhjoi" },
+  { label: "LinkedIn", handle: "linkedin.com/in/khanh-nguyen", href: "https://linkedin.com/in/khanh-nguyen-707b55215" },
 ];
+
+const newTabProps = (href: string) =>
+  href.startsWith("http") ? { target: "_blank" as const, rel: "noopener noreferrer" } : {};
 
 export default function Contact() {
   const ref = useRef<HTMLDivElement>(null);
@@ -69,11 +71,11 @@ export default function Contact() {
 
         {/* Social cards */}
         <div className="reveal" style={{
-          display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
+          display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
           gap: "0", marginBottom: "48px",
         }}>
           {socials.map((s, i) => (
-            <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
+            <a key={s.label} href={s.href} {...newTabProps(s.href)}
               style={{
                 display: "block", textDecoration: "none", color: "#0A0A0A",
                 border: "2.5px solid #0A0A0A",
@@ -129,7 +131,7 @@ export default function Contact() {
             }}>
               Preferred contact
             </p>
-            <a href="mailto:you@email.com" style={{
+            <a href="mailto:khanhjoi1@mail.com" style={{
               fontSize: "clamp(1.2rem, 3vw, 2rem)", fontWeight: "bold",
               color: "#F2EDE4", textDecoration: "none",
               fontFamily: "'Space Mono', monospace", transition: "color 0.2s",
@@ -137,10 +139,10 @@ export default function Contact() {
             onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#FFE500"}
             onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "#F2EDE4"}
             >
-              you@email.com
+              khanhjoi1@mail.com
             </a>
           </div>
-          <a href="mailto:you@email.com" style={{
+          <a href="mailto:khanhjoi1@mail.com" style={{
             border: "2.5px solid #F2EDE4", padding: "14px 36px",
             fontSize: "11px", fontWeight: "bold", textTransform: "uppercase",
             letterSpacing: "0.18em", textDecoration: "none", color: "#F2EDE4",
@@ -175,9 +177,9 @@ export default function Contact() {
               color: "#8A8A8A", fontFamily: "'Space Mono', monospace",
             }}
           >
-            © {new Date().getFullYear()} Your Name — All rights reserved
+            © {new Date().getFullYear()} Nguyen Chi Khanh — All rights reserved
           </span>
-          <span style={{
+          {/* <span style={{
             fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.2em",
             color: "#8A8A8A", fontFamily: "'Space Mono', monospace",
             display: "flex", alignItems: "center", gap: "6px",
@@ -186,7 +188,7 @@ export default function Contact() {
             <span style={{ color: "#FF2800", fontWeight: "bold" }}>Next.js</span>
             +
             <span style={{ color: "#FF2800", fontWeight: "bold" }}>Tailwind CSS</span>
-          </span>
+          </span> */}
         </div>
 
       </div>

@@ -70,21 +70,16 @@ export default function Blog() {
                 marginBottom: "20px",
               }}
             >
-              Building a<br />
-              <span style={{ color: "#FF2800" }}>Blog</span>
+              Research<br />
+              <span style={{ color: "#FF2800" }}>Together</span>
             </h2>
             <p style={{ fontSize: "14px", lineHeight: 1.75, maxWidth: "540px", marginBottom: "18px" }}>
-              I am assembling a writing space where I go deep on{" "}
-              <span style={{ fontWeight: 700 }}>databases</span> — modeling, query patterns, indexing, migrations, and running Postgres
-              in production — alongside interactive notes powered by{" "}
-              <span style={{ fontWeight: 700 }}>Three.js</span> so ideas stay spatial and tangible, not just prose on a page.
-            </p>
-            <p style={{ fontSize: "13px", lineHeight: 1.7, maxWidth: "540px", opacity: 0.85, marginBottom: "28px" }}>
-              Expect practical breakdowns: schema design trade-offs, observability for slow queries, and lightweight 3D sketches that
-              explain concepts worth seeing from more than one angle.
+              I&apos;m building a small writing space where our group sits down and goes deep on{" "}
+              <span style={{ fontWeight: 700 }}>software engineering</span> — the parts you only learn by breaking things, fixing them,
+              and arguing about trade-offs. 
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "22px" }}>
-              {["Postgres", "SQL", "Three.js", "WebGL", "Next.js"].map((tag) => (
+              {["Software Engineering", "Research", "Microservices", "Cloud Computing", "AI", "Data Engineering"].map((tag) => (
                 <span
                   key={tag}
                   style={{
@@ -94,7 +89,7 @@ export default function Blog() {
                     fontWeight: "bold",
                     border: "2px solid #0A0A0A",
                     padding: "6px 12px",
-                    backgroundColor: tag === "Three.js" ? "#FFE500" : "transparent",
+                    backgroundColor: tag === "Research" ? "#FFE500" : "transparent",
                   }}
                 >
                   {tag}
@@ -127,7 +122,7 @@ export default function Blog() {
                 el.style.color = "#0A0A0A";
               }}
             >
-              Featured post ↗
+              Read our notes ↗
             </a>
           </div>
 
@@ -142,7 +137,7 @@ export default function Blog() {
                 opacity: 0.72,
               }}
             >
-              Live Three.js backdrop — same tech stack as the articles will use for demos.
+              One request hops Gateway → services → Postgres — the pattern behind most microservice stacks.
             </p>
           </div>
         </div>
